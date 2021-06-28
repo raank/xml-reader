@@ -1,0 +1,49 @@
+version: '3.7'
+
+networks:
+  raank-network:
+    driver: bridge
+
+services:
+  php:
+    build: ./_docker/php
+    restart: always
+    tty: true
+    container_name: raank-php
+    networks:
+      - raank-network
+    ports:
+      - '9000:9000'
+    volumes:
+      - ./:/var/www/html:delegated
+
+  nginx:
+    build: ./_docker/nginx
+    container_name: raank-nginx
+    restart: always
+    tty: true
+    depends_on:
+      - php
+    ports:
+      - "8081:80"
+    volumes:
+      - ./:/var/www/html:delegated
+    networks:
+      - raank-network
+
+  mysql:
+    image: mysql:8
+    tty: true
+    restart: always
+    container_name: raank-mysql
+    networks:
+      - raank-network
+    ports:
+      - '3306:3306'
+    volumes:
+      - './_docker/mysql/config/mysql.cnf:/etc/mysql/conf.d/custom.cnf:ro'
+      - './_docker/mysql/database:/var/lib/mysql'
+    environment:
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=development

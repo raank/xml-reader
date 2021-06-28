@@ -1,0 +1,1165 @@
+openapi: 3.0.0
+info:
+  title: raank/xml-reader
+  description: 'This is a micro authentication service and users or files crud. '
+  contact:
+    email: raank92@gmail.com
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost:8081/api'
+paths:
+  /v1/auth/register:
+    post:
+      tags:
+        - v1.auth
+      summary: 'User Registering on Application.'
+      operationId: d474e912feca6df4486321adf352cb03
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - email
+                - password
+                - password_confirmation
+              properties:
+                name:
+                  description: 'The name of user.'
+                  type: string
+                email:
+                  description: 'The email of user.'
+                  type: string
+                password:
+                  description: 'The password of user.'
+                  type: string
+                password_confirmation:
+                  description: 'The password confirmation.'
+                  type: string
+                document:
+                  description: 'The document of user.'
+                  type: string
+              type: object
+              example:
+                name: 'John Doe'
+                email: john@doe.com
+                password: password123
+                password_confirmation: password123
+                document: '12345678910'
+      responses:
+        '201':
+          description: 'Information has been successfully registered'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Information has been successfully registered' }
+                  data: { $ref: '#/components/schemas/v1.auth.response' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '422':
+          description: 'There is some incorrect information'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Validation'
+  /v1/auth/login:
+    post:
+      tags:
+        - v1.auth
+      summary: 'User login on Application.'
+      operationId: 704cdcfe47aa8881b06d386879e7346e
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  description: 'The email of user.'
+                  type: string
+                password:
+                  description: 'The password of user.'
+                  type: string
+              type: object
+              example:
+                email: john@doe.com
+                password: password123
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                  data: { $ref: '#/components/schemas/v1.auth.response' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '422':
+          description: 'There is some incorrect information'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Validation'
+        '404':
+          description: 'This information could not be found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notfound'
+  /v1/auth/forgot:
+    post:
+      tags:
+        - v1.auth
+      summary: 'User forgot password.'
+      operationId: d76a46adb7b56eafc4697454fe5f7c69
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  description: 'The email of user.'
+                  type: string
+              type: object
+              example:
+                email: john@doe.com
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: 'This information could not be found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notfound'
+        '422':
+          description: 'There is some incorrect information'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Validation'
+  '/v1/auth/reset/{remember_token}':
+    post:
+      tags:
+        - v1.auth
+      summary: 'User reset password.'
+      operationId: d0abfadf8a85175a5f5e118e5522db43
+      parameters:
+        -
+          name: remember_token
+          in: path
+          description: 'Remember token of User'
+          required: true
+          schema:
+            type: string
+          example: ABc123DefG
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - password
+                - password_confirmation
+              properties:
+                password:
+                  description: 'The password of user.'
+                  type: string
+                password_confirmation:
+                  description: 'The password confirmation.'
+                  type: string
+              type: object
+              example:
+                password: password123
+                password_confirmation: password123
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                type: object
+        '404':
+          description: 'This information could not be found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notfound'
+        '422':
+          description: 'There is some incorrect information'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Validation'
+  /v1/auth/check:
+    head:
+      tags:
+        - v1.auth
+      summary: 'Checking if user is authenticated.'
+      operationId: 11d49faee15968bac82783e7e165f78a
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: 'This information could not be found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notfound'
+      security:
+        -
+          bearerAuth: []
+  /v1/auth/refresh:
+    get:
+      tags:
+        - v1.auth
+      summary: 'User refresh token.'
+      operationId: 7c7d2c7c861d9c4d3a0846f45758c904
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                  data: { $ref: '#/components/schemas/v1.auth.response' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: 'This information could not be found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notfound'
+      security:
+        -
+          bearerAuth: []
+  /v1/files:
+    post:
+      tags:
+        - v1.files
+      summary: 'Storing a new File to User.'
+      operationId: f48c68b8dab381c4d0e995b60c94b6e4
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+                - file
+                - user_id
+              properties:
+                file:
+                  description: 'The file to parse.'
+                user_id:
+                  description: 'The user id to relation.'
+                  type: integer
+                  example: 1
+              type: object
+      responses:
+        '202':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                  data: { $ref: '#/components/schemas/v1.models.file' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      security:
+        -
+          apiToken: []
+  '/v1/files/{fileId}':
+    get:
+      tags:
+        - v1.files
+      summary: 'Show specified file.'
+      operationId: e09671ff48d4f0de1ae623e8405c98bd
+      parameters:
+        -
+          name: fileId
+          in: path
+          description: 'Identification of File'
+          required: true
+          schema:
+            type: integer
+          example: 2
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                  data: { $ref: '#/components/schemas/v1.models.file' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: 'This information could not be found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notfound'
+      security:
+        -
+          apiToken: []
+    delete:
+      tags:
+        - v1.files
+      summary: 'Delete specified file.'
+      operationId: 27318961b2a6fb666adb4ae79244444f
+      parameters:
+        -
+          name: fileId
+          in: path
+          description: 'Identification of File'
+          required: true
+          schema:
+            type: integer
+          example: 2
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: 'This information could not be found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notfound'
+      security:
+        -
+          apiToken: []
+  /v1/files/search:
+    post:
+      tags:
+        - v1.files
+      summary: 'Searching files.'
+      operationId: bdbb158604c34a4f6446c59a94dd9511
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                where:
+                  description: 'Where Condition.'
+                whereNotNull:
+                  description: 'Where field not null.'
+                whereNull:
+                  description: 'Where field is nullable.'
+                orderBy:
+                  description: 'The password confirmation.'
+                whereBetween:
+                  description: 'The filename of file.'
+              type: object
+              example:
+                where:
+                  - [field_name, operator, value]
+                  - [name, LIKE, john]
+                whereNotNull:
+                  - field_name
+                whereNull:
+                  - field_name
+                orderBy:
+                  - { field_name: field_name, order: DESC }
+                whereBetween:
+                  - { field_name: [from_value, to_value] }
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.paginated.files'
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      security:
+        -
+          apiToken: []
+  /v1/users:
+    get:
+      tags:
+        - v1.users
+      summary: 'All users.'
+      operationId: d8f40dfcbbb694dcb7033eebdd31830d
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.paginated.users'
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      security:
+        -
+          apiToken: []
+    post:
+      tags:
+        - v1.users
+      summary: 'Storing a new User.'
+      operationId: aa192f25c50e78c9799d5474566eb83a
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - name
+                - email
+                - password
+                - password_confirmation
+              properties:
+                name:
+                  description: 'The name of user.'
+                  type: string
+                email:
+                  description: 'The email of user.'
+                  type: string
+                password:
+                  description: 'The password of user.'
+                  type: string
+                password_confirmation:
+                  description: 'The password confirmation.'
+                  type: string
+                document:
+                  description: 'The document of user.'
+                  type: string
+              type: object
+              example:
+                name: 'John Doe'
+                email: john@doe.com
+                password: password123
+                password_confirmation: password123
+                document: '12345678'
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                  data: { $ref: '#/components/schemas/v1.models.user' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      security:
+        -
+          apiToken: []
+  '/v1/users/{userId}':
+    get:
+      tags:
+        - v1.users
+      summary: 'Show user specified.'
+      operationId: 20b859076cc7f05bb711d52c65c7fa9e
+      parameters:
+        -
+          name: userId
+          in: path
+          description: 'Identification of User'
+          required: true
+          schema:
+            type: string
+          example: 60aeba949828bb0c57abc123
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                  data: { $ref: '#/components/schemas/v1.models.user' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: 'This information could not be found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notfound'
+      security:
+        -
+          apiToken: []
+    put:
+      tags:
+        - v1.users
+      summary: 'Update user specified.'
+      operationId: 31dd3427dc5aedb58ce770759e0ccc50
+      parameters:
+        -
+          name: userId
+          in: path
+          description: 'Identification of User'
+          required: true
+          schema:
+            type: string
+          example: 60aeba949828bb0c57abc123
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  description: 'The name of user.'
+                  type: string
+                email:
+                  description: 'The email of user.'
+                  type: string
+                document:
+                  description: 'The document of user.'
+                  type: string
+              type: object
+              example:
+                name: 'John Doe'
+                email: john@doe.com
+                document: '12345678'
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                  data: { $ref: '#/components/schemas/v1.models.user' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: 'This information could not be found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notfound'
+      security:
+        -
+          apiToken: []
+    delete:
+      tags:
+        - v1.users
+      summary: 'Delete user specified.'
+      operationId: 216dd661b9183f9566889fd2e4a1de3a
+      parameters:
+        -
+          name: userId
+          in: path
+          description: 'Identification of User'
+          required: true
+          schema:
+            type: string
+          example: 60aeba949828bb0c57abc123
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: 'This information could not be found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notfound'
+      security:
+        -
+          apiToken: []
+  /v1/users/search:
+    post:
+      tags:
+        - v1.users
+      summary: 'Searching users.'
+      operationId: 964381650e5c4e3a91bd8c69b6ba8792
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                where:
+                  description: 'Where Condition.'
+                whereNotNull:
+                  description: 'Where field not null.'
+                whereNull:
+                  description: 'Where field is nullable.'
+                orderBy:
+                  description: 'The password confirmation.'
+                whereBetween:
+                  description: 'The where between of user.'
+              type: object
+              example:
+                where:
+                  - [field_name, operator, value]
+                  - [name, LIKE, john]
+                whereNotNull:
+                  - field_name
+                whereNull:
+                  - field_name
+                orderBy:
+                  - { field_name: field_name, order: DESC }
+                whereBetween:
+                  - { field_name: [from_value, to_value] }
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1.paginated.users'
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+      security:
+        -
+          apiToken: []
+  /v1/health-check:
+    head:
+      tags:
+        - v1.app
+      summary: 'Health check endpoint.'
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+  /v1/token-valid:
+    head:
+      tags:
+        - v1.app
+      summary: 'Token checking endpoint.'
+      responses:
+        '200':
+          description: 'Successful action'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { description: 'Message of Response', type: string, example: 'Successful action' }
+                type: object
+        '400':
+          description: 'This information could not be processed'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '401':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '404':
+          description: 'You are not authorized for this action'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+components:
+  schemas:
+    BadRequest:
+      description: 'This information could not be processed'
+      properties:
+        message:
+          description: 'Message of Response'
+          type: string
+          example: 'This information could not be processed'
+      type: object
+    Notfound:
+      description: 'This information could not be found'
+      properties:
+        message:
+          description: 'Message of Response'
+          type: string
+          example: 'This information could not be found'
+      type: object
+    Unauthorized:
+      description: 'You are not authorized for this action'
+      properties:
+        message:
+          description: 'Message of Response'
+          type: string
+          example: 'You are not authorized for this action'
+      type: object
+    Validation:
+      description: 'There is some incorrect information'
+      properties:
+        message:
+          description: 'Message of Response'
+          type: string
+        errors:
+          description: 'Errors of Request'
+          type: object
+      type: object
+      example:
+        message: 'There is some incorrect information'
+        errors:
+          field:
+            - 'Message of Validation'
+    v1.pagination.links:
+      description: 'List of Links'
+      properties:
+        url:
+          description: 'URL of Link'
+          type: string
+          example: 'http://localhost'
+        label:
+          description: 'Label of Link'
+          type: string
+          example: my-label
+        active:
+          description: 'Link is active'
+          type: boolean
+          example: true
+      type: object
+    v1.token:
+      description: 'Response auth token'
+      allOf:
+        -
+          $ref: '#/components/schemas/v1.pagination.links'
+        -
+          properties:
+            token:
+              description: 'Token access'
+              type: string
+              example: abc1234defg
+            type:
+              description: 'Type of Token'
+              type: string
+              example: Bearer
+            expires:
+              description: 'Expires token in'
+              type: integer
+              example: 3600
+          type: object
+    v1.auth.response:
+      description: 'Response data of Authentication'
+      properties:
+        auth:
+          $ref: '#/components/schemas/v1.token'
+        user:
+          $ref: '#/components/schemas/v1.models.user'
+      type: object
+    v1.paginated.files:
+      description: 'Response CRUD paginated'
+      allOf:
+        -
+          $ref: '#/components/schemas/v1.pagination.links'
+        -
+          properties:
+            message:
+              description: 'Message of Response'
+              type: string
+              example: 'Successful action'
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/v1.models.file'
+            current_page:
+              description: 'Current page'
+              type: integer
+              example: 1
+            first_page_url:
+              description: 'First page URL'
+              type: string
+              example: 'http://localhost'
+            from:
+              description: 'From start items'
+              type: integer
+              example: 1
+            last_page:
+              description: 'Last Page Number'
+              type: integer
+              example: 1
+            last_page_url:
+              description: 'Last page URL'
+              type: string
+              example: 'http://localhost'
+            links:
+              description: 'List of Links'
+              type: array
+              items:
+                $ref: '#/components/schemas/v1.pagination.links'
+            next_page_url:
+              description: 'Next page URL'
+              type: string
+              example: 'http://localhost'
+            path:
+              description: 'Path of current URL'
+              type: string
+              example: 'http://localhost'
+            per_page:
+              description: 'Items number per page'
+              type: integer
+              example: 1
+            prev_page_url:
+              description: 'Prev page URL'
+              type: string
+              example: 'http://localhost'
+            to:
+              description: 'Items to end page'
+              type: integer
+              example: 1
+            total:
+              description: 'Total of Items'
+              type: integer
+              example: 1
+          type: object
+    v1.paginated.users:
+      description: 'Response CRUD paginated'
+      allOf:
+        -
+          $ref: '#/components/schemas/v1.pagination.links'
+        -
+          properties:
+            message:
+              description: 'Message of Response'
+              type: string
+              example: 'Successful action'
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/v1.models.user'
+            current_page:
+              description: 'Current page'
+              type: integer
+              example: 1
+            first_page_url:
+              description: 'First page URL'
+              type: string
+              example: 'http://localhost'
+            from:
+              description: 'From start items'
+              type: integer
+              example: 1
+            last_page:
+              description: 'Last Page Number'
+              type: integer
+              example: 1
+            last_page_url:
+              description: 'Last page URL'
+              type: string
+              example: 'http://localhost'
+            links:
+              description: 'List of Links'
+              type: array
+              items:
+                $ref: '#/components/schemas/v1.pagination.links'
+            next_page_url:
+              description: 'Next page URL'
+              type: string
+              example: 'http://localhost'
+            path:
+              description: 'Path of current URL'
+              type: string
+              example: 'http://localhost'
+            per_page:
+              description: 'Items number per page'
+              type: integer
+              example: 1
+            prev_page_url:
+              description: 'Prev page URL'
+              type: string
+              example: 'http://localhost'
+            to:
+              description: 'Items to end page'
+              type: integer
+              example: 1
+            total:
+              description: 'Total of Items'
+              type: integer
+              example: 1
+          type: object
+    v1.models.file:
+      description: 'Response data of user'
+      properties:
+        id:
+          description: 'Identification of User'
+          type: integer
+          example: 1
+        original:
+          description: 'The file original name.'
+          type: string
+          example: my-file.xml
+        name:
+          description: 'The file name.'
+          type: string
+          example: file_hashed.xml
+        path:
+          description: 'Email of User'
+          type: string
+          example: /path/to/file_hashed.xml
+        size:
+          description: 'The file size'
+          type: integer
+          example: 1234
+        mimeType:
+          description: 'The file mime type'
+          type: string
+          example: application/xml
+        content:
+          description: 'The content of file'
+          type: object
+        updated_at:
+          description: 'Date of last updated'
+          type: string
+          example: '2021-01-01T00:00:00.000000Z'
+        created_at:
+          description: 'Date of Created'
+          type: string
+          example: '2021-01-01T00:00:00.000000Z'
+        deleted_at:
+          description: 'Date of Destroy'
+          type: string
+          example: null
+      type: object
+    v1.models.user:
+      description: 'Response data of user'
+      properties:
+        id:
+          description: 'Identification of User'
+          type: integer
+          example: 1
+        name:
+          description: 'Name of User'
+          type: string
+          example: 'John Doe'
+        email:
+          description: 'Email of User'
+          type: string
+          example: john@doe.com
+        document:
+          description: 'Document of User'
+          type: string
+          example: '123456789'
+        deleted_at:
+          description: 'Date of Destroy'
+          type: string
+          example: null
+        updated_at:
+          description: 'Date of last updated'
+          type: string
+          example: '2021-01-01T00:00:00.000000Z'
+        created_at:
+          description: 'Date of Created'
+          type: string
+          example: '2021-01-01T00:00:00.000000Z'
+      type: object
+  securitySchemes:
+    apiToken:
+      type: apiKey
+      name: X-App-Token
+      in: header
+    bearerAuth:
+      type: http
+      description: 'Informations of API.'
+      scheme: bearer
+tags:
+  -
+    name: v1.auth
+    description: 'Authentication routes'
+  -
+    name: v1.users
+    description: 'Users endpoints'
+  -
+    name: v1.files
+    description: 'The files endpoints'
+  -
+    name: v1.app
+    description: 'The application endpoints'

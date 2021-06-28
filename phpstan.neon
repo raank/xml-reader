@@ -1,0 +1,19 @@
+includes:
+
+parameters:
+    level: 8
+    paths:
+        - app
+        - tests
+
+    bootstrapFiles:
+        - ./bootstrap/app.php
+        
+    ignoreErrors:
+        - '#Call to an undefined static method [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\)#'
+        - '#Call to an undefined method [a-zA-Z0-9\\_]+|[a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+\(\)#'
+
+    excludePaths:
+        - ./public/*
+
+    checkMissingIterableValueType: false

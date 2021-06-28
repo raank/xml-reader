@@ -1,0 +1,14 @@
+{
+    "Success": "Ação realizada com sucesso!",
+    "Register": "Informação foi registrada com sucesso!",
+    "NotUpdated": "Conteúdo não alterado!",
+    "Error": "Não foi possível processar essa informação!",
+    "Unauthorized": "Você não tem autorização para essa ação!",
+    "Notfound": "Não foi possível encontrar essa informação!",
+    "ErrorMethod": "Esse método não está habilitado!",
+    "NotAcceptable": "Informações não foram aceitas!",
+    "InternalError": "Erro interno!",
+    "Unavailable": "Serviço não disponível!",
+    "InvalidCredentials": "As credênciais estão incorretas!",
+    "DataInvalid": "Dados estão incorretos!"
+}
