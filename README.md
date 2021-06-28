@@ -42,4 +42,6 @@ Rodando Testes:
 make test
 ```
 
-![Cobertura de Testes](/storage/app/file-make-install.jpeg?raw=true "Cobertura de Testes")
+![Cobertura de Testes](/storage/app/file-make-test.jpeg?raw=true "Cobertura de Testes")
+
+Confira a documentação de API: [Swagger API](https://bit.ly/2U6CRBU)
