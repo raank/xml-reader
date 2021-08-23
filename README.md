@@ -44,4 +44,8 @@ make test
 
 ![Cobertura de Testes](/storage/app/file-make-test.jpeg?raw=true "Cobertura de Testes")
 
+Gerando a Documentação:
+```shel
+make doc
+```
 Confira a documentação de API: [Swagger API](https://bit.ly/2U6CRBU)
