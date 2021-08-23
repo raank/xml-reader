@@ -1,5 +1,9 @@
 test:
 	@sh tests.sh
+    
+doc:
+    @./vendor/bin/openapi --bootstrap ./routes/api.php --output ./swagger.yaml -f .yaml ./routes/api.php ./api/**
+    @echo "Documentation Generated on \".swagger.yaml\""
 
 install:
 	@docker-compose up -d --build
